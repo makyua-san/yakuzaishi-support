@@ -243,40 +243,40 @@ const Index = () => {
                   onRangePercentChange={setRangePercent}
                   prescription={prescription}
                   onPrescriptionChange={setPrescription}
+                  onBack={goToPrev}
+                  onNewCheck={reset}
                 />
               </>
             )}
           </CardContent>
         </Card>
 
-        {/* ナビゲーションボタン */}
-        <div className="flex justify-between gap-4">
-          {currentStepIndex > 0 ? (
-            <Button variant="outline" onClick={goToPrev} className="flex-1">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              戻る
-            </Button>
-          ) : (
-            <div className="flex-1" />
-          )}
+        {/* ナビゲーションボタン（結果画面では固定バーに置き換え） */}
+        {currentStep !== 'result' && (
+          <div className="flex justify-between gap-4">
+            {currentStepIndex > 0 ? (
+              <Button variant="outline" onClick={goToPrev} className="flex-1">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                戻る
+              </Button>
+            ) : (
+              <div className="flex-1" />
+            )}
 
-          {currentStep === 'result' ? (
-            <Button onClick={reset} variant="secondary" className="flex-1">
-              新規チェック
-            </Button>
-          ) : currentStep === 'drug' ? (
-            <div className="flex-1" />
-          ) : (
-            <Button
-              onClick={goToNext}
-              disabled={!canProceed}
-              className="flex-1"
-            >
-              次へ
-              <ArrowRight className="h-4 w-4 ml-2" />
-            </Button>
-          )}
-        </div>
+            {currentStep === 'drug' ? (
+              <div className="flex-1" />
+            ) : (
+              <Button
+                onClick={goToNext}
+                disabled={!canProceed}
+                className="flex-1"
+              >
+                次へ
+                <ArrowRight className="h-4 w-4 ml-2" />
+              </Button>
+            )}
+          </div>
+        )}
       </main>
 
       {/* フッター */}

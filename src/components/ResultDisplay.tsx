@@ -36,6 +36,8 @@ interface ResultDisplayProps {
   onRangePercentChange: (percent: number) => void;
   prescription: PrescriptionInfo;
   onPrescriptionChange: (prescription: PrescriptionInfo) => void;
+  onBack: () => void;
+  onNewCheck: () => void;
 }
 
 export const ResultDisplay = ({
@@ -45,6 +47,8 @@ export const ResultDisplay = ({
   onRangePercentChange,
   prescription,
   onPrescriptionChange,
+  onBack,
+  onNewCheck,
 }: ResultDisplayProps) => {
   const [isStepsOpen, setIsStepsOpen] = useState(true);
   const [isSourceOpen, setIsSourceOpen] = useState(false);
@@ -460,6 +464,29 @@ export const ResultDisplay = ({
           </p>
         </CardContent>
       </Card>
+
+      {/* 画面下部に固定のアクションバー */}
+      <div className="fixed bottom-4 left-0 right-0 z-30 pointer-events-none">
+        <div className="mx-auto max-w-2xl px-4">
+          <div className="pointer-events-auto rounded-xl border border-border bg-card/95 backdrop-blur shadow-lg shadow-primary/15">
+            <div className="flex gap-3 p-3">
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={onBack}
+              >
+                戻る
+              </Button>
+              <Button
+                onClick={onNewCheck}
+                className="flex-1 bg-primary text-primary-foreground shadow-lg shadow-primary/40 ring-2 ring-primary/30 hover:bg-primary/90"
+              >
+                新規チェック
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
