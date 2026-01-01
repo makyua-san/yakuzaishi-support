@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { DrugInfo } from '@/types/drug';
@@ -8,9 +9,16 @@ import { Search, Pill } from 'lucide-react';
 interface DrugSelectorProps {
   onSelect: (drug: DrugInfo) => void;
   selectedDrug: DrugInfo | null;
+  history: DrugInfo[];
+  onClearHistory: () => void;
 }
 
-export const DrugSelector = ({ onSelect, selectedDrug }: DrugSelectorProps) => {
+export const DrugSelector = ({
+  onSelect,
+  selectedDrug,
+  history,
+  onClearHistory,
+}: DrugSelectorProps) => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredDrugs = useMemo(() => {
@@ -22,6 +30,30 @@ export const DrugSelector = ({ onSelect, selectedDrug }: DrugSelectorProps) => {
 
   return (
     <div className="space-y-4">
+      {history.length > 0 && (
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-medium">最近選択した薬剤</p>
+            <Button variant="ghost" size="sm" onClick={onClearHistory}>
+              履歴をクリア
+            </Button>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {history.map((drug) => (
+              <Button
+                key={drug.id}
+                variant="ghost"
+                size="sm"
+                onClick={() => onSelect(drug)}
+                className="justify-start text-muted-foreground border border-border"
+              >
+                {drug.name}
+              </Button>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
@@ -37,11 +69,7 @@ export const DrugSelector = ({ onSelect, selectedDrug }: DrugSelectorProps) => {
         {filteredDrugs.map((drug) => (
           <Card
             key={drug.id}
-            className={`cursor-pointer transition-all hover:shadow-md ${
-              selectedDrug?.id === drug.id
-                ? 'ring-2 ring-primary bg-primary/5'
-                : 'hover:bg-secondary/50'
-            }`}
+            className="cursor-pointer transition-all hover:bg-secondary/40 border border-border"
             onClick={() => onSelect(drug)}
           >
             <CardContent className="p-4 flex items-center gap-3">
@@ -52,9 +80,6 @@ export const DrugSelector = ({ onSelect, selectedDrug }: DrugSelectorProps) => {
                 <p className="font-medium">{drug.name}</p>
                 <p className="text-sm text-muted-foreground">{drug.genericName}</p>
               </div>
-              {selectedDrug?.id === drug.id && (
-                <div className="w-2 h-2 rounded-full bg-primary" />
-              )}
             </CardContent>
           </Card>
         ))}

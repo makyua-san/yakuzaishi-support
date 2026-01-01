@@ -1,73 +1,68 @@
-# Welcome to your Lovable project
+# 小児用量チェッカー
 
-## Project info
+薬剤師向けに、小児処方の用量を簡単に計算・チェックできる React/Vite 製のウェブアプリです。薬剤選択から患者情報入力、処方量との比較までを段階的な UI でサポートします。
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## 主な機能
+- 薬剤検索・選択（最近選択した薬剤のローカル履歴保持）
+- 年齢（月齢換算）・体重入力スライダーと数値入力の両対応
+- 添付文書ベースの計算ルールを用いた基準用量算出
+- ルールが複数ある薬剤でのルール切替、許容レンジの±%調整
+- 処方量（mg または mL+濃度）入力による適正判定と注意・警告表示
+- 計算過程・根拠情報の開閉表示、結果レンジとの比較表示
 
-## How can I edit this code?
+## 技術スタック
+- Vite + React 18 + TypeScript
+- Tailwind CSS / shadcn/ui（Radix UI ベースのコンポーネント）
+- React Router, TanStack Query
+- 開発ツール: ESLint, TypeScript, SWC
 
-There are several ways of editing your application.
+## 動作環境
+- Node.js 18 以上を推奨（Vite 5 系対応）
+- パッケージマネージャー: `npm`（`package-lock.json` あり）
 
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+## セットアップ
+```bash
+npm install
 ```
 
-**Edit a file directly in GitHub**
+### 開発サーバー
+```bash
+npm run dev
+```
+ブラウザで表示されたローカルホスト URL にアクセスします。
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### ビルド
+```bash
+npm run build
+```
 
-**Use GitHub Codespaces**
+### プレビュー
+```bash
+npm run preview
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### リント
+```bash
+npm run lint
+```
 
-## What technologies are used for this project?
+## 使い方
+1. **薬剤選択**: 画面上部の検索欄から薬剤名を検索し選択。最近選択した薬剤は履歴から再選択できます。
+2. **患者情報入力**: 年齢（歳・か月）と体重をスライダーまたは数値入力で設定します。
+3. **結果確認**: 基準用量・推奨レンジが表示されます。複数ルールがある薬剤では適用ルールを切り替え可能、許容率（±%）も調整できます。
+4. **処方量との比較（任意）**: 1回量と1日回数を入力し、mL 入力時は濃度を併せて指定します。適正・注意・要確認のステータスと警告が表示され、推奨レンジとの比較表も確認できます。
 
-This project is built with:
+## データとロジック
+- サンプル薬剤データ: `src/data/drugs.ts`
+- 用量計算ロジック: `src/lib/calculator.ts`（年齢を月齢換算し、体重とルールに基づき推奨用量を算出）
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## ディレクトリ概要
+- `src/pages`: 画面コンポーネント (`Index.tsx`, `NotFound.tsx`)
+- `src/components`: UI・機能コンポーネント（`DrugSelector`, `PatientInput`, `ResultDisplay` など）
+- `src/lib`: 計算・ユーティリティ
+- `src/data`: 薬剤データ
+- `src/types`: 型定義
 
-## How can I deploy this project?
+## 免責事項
+本アプリは用量計算の支援ツールです。最終的な処方判断は必ず薬剤師が行い、添付文書・施設基準・患者状態を優先してください。
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)

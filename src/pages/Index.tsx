@@ -1,10 +1,11 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DrugSelector } from '@/components/DrugSelector';
 import { PatientInput } from '@/components/PatientInput';
 import { ResultDisplay } from '@/components/ResultDisplay';
 import { DrugInfo, PatientInfo, PrescriptionInfo, CalculationResult } from '@/types/drug';
+import { getDrugById } from '@/data/drugs';
 import { calculateDosage } from '@/lib/calculator';
 import { ArrowLeft, ArrowRight, Pill, AlertTriangle } from 'lucide-react';
 
@@ -13,6 +14,7 @@ type Step = 'drug' | 'patient' | 'result';
 const Index = () => {
   const [currentStep, setCurrentStep] = useState<Step>('drug');
   const [selectedDrug, setSelectedDrug] = useState<DrugInfo | null>(null);
+  const [drugHistory, setDrugHistory] = useState<DrugInfo[]>([]);
   const [patient, setPatient] = useState<PatientInfo>({
     ageYears: 0,
     ageMonths: 0,
@@ -31,6 +33,21 @@ const Index = () => {
     { key: 'patient', label: '患者情報', number: 2 },
     { key: 'result', label: '結果', number: 3 },
   ];
+
+  useEffect(() => {
+    const storedIds = localStorage.getItem('drugHistory');
+    if (!storedIds) return;
+    try {
+      const ids: string[] = JSON.parse(storedIds);
+      const restored = ids
+        .map((id) => getDrugById(id))
+        .filter((drug): drug is DrugInfo => Boolean(drug));
+      setDrugHistory(restored);
+    } catch (e) {
+      console.error('Failed to restore history', e);
+      localStorage.removeItem('drugHistory');
+    }
+  }, []);
 
   const currentStepIndex = steps.findIndex((s) => s.key === currentStep);
 
@@ -54,7 +71,17 @@ const Index = () => {
 
   const handleSelectDrug = (drug: DrugInfo) => {
     setSelectedDrug(drug);
+    setDrugHistory((prev) => {
+      const next = [drug, ...prev.filter((d) => d.id !== drug.id)].slice(0, 5);
+      localStorage.setItem('drugHistory', JSON.stringify(next.map((d) => d.id)));
+      return next;
+    });
     setCurrentStep('patient');
+  };
+
+  const clearHistory = () => {
+    setDrugHistory([]);
+    localStorage.removeItem('drugHistory');
   };
 
   const goToNext = () => {
@@ -153,18 +180,40 @@ const Index = () => {
         {/* ステップコンテンツ */}
         <Card className="mb-6">
           <CardHeader>
-            <CardTitle>{steps[currentStepIndex].label}</CardTitle>
+            <div className="flex items-center justify-between gap-3">
+              <CardTitle>{steps[currentStepIndex].label}</CardTitle>
+              {currentStep === 'patient' && selectedDrug && (
+                <div className="flex items-center gap-2.5 rounded-lg border border-border bg-muted/40 px-3 py-2 w-fit">
+                  <div className="p-2 bg-muted text-muted-foreground rounded-full">
+                    <Pill className="h-4 w-4" />
+                  </div>
+                  <div className="flex items-center gap-1 flex-wrap">
+                    <span className="text-[11px] text-muted-foreground">選択中の薬剤:</span>
+                    <span className="text-sm font-medium leading-tight">{selectedDrug.name}</span>
+                    <span className="text-xs text-muted-foreground">
+                      ({selectedDrug.genericName})
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
           </CardHeader>
           <CardContent>
             {currentStep === 'drug' && (
               <DrugSelector
                 onSelect={handleSelectDrug}
                 selectedDrug={selectedDrug}
+                history={drugHistory}
+                onClearHistory={clearHistory}
               />
             )}
 
             {currentStep === 'patient' && (
-              <PatientInput patient={patient} onChange={setPatient} />
+              <PatientInput
+                patient={patient}
+                onChange={setPatient}
+                selectedDrug={selectedDrug}
+              />
             )}
 
             {currentStep === 'result' && result && selectedDrug && (

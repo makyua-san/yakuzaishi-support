@@ -1,19 +1,20 @@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
-import { PatientInfo } from '@/types/drug';
-import { User, Scale } from 'lucide-react';
+import { DrugInfo, PatientInfo } from '@/types/drug';
+import { User, Scale, Pill } from 'lucide-react';
 
 interface PatientInputProps {
   patient: PatientInfo;
   onChange: (patient: PatientInfo) => void;
+  selectedDrug: DrugInfo | null;
 }
 
 const AGE_MAX_YEARS = 16;
 const AGE_MAX_MONTHS = AGE_MAX_YEARS * 12;
 const WEIGHT_MAX_KG = 100;
 
-export const PatientInput = ({ patient, onChange }: PatientInputProps) => {
+export const PatientInput = ({ patient, onChange, selectedDrug }: PatientInputProps) => {
   const ageInMonths = Math.min(
     AGE_MAX_MONTHS,
     Math.max(0, patient.ageYears * 12 + patient.ageMonths)
