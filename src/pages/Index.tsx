@@ -129,9 +129,9 @@ const Index = () => {
       {/* プログレスバー */}
       <div className="bg-card border-b border-border">
         <div className="container mx-auto px-4 py-3 max-w-2xl">
-          <div className="flex items-center justify-between">
+          <div className="flex w-full flex-nowrap items-center justify-between gap-2 sm:gap-3 md:gap-4">
             {steps.map((step, index) => (
-              <div key={step.key} className="flex items-center">
+              <div key={step.key} className="flex items-center flex-shrink-0">
                 <div className="flex items-center gap-2">
                   <div
                     className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
@@ -143,7 +143,7 @@ const Index = () => {
                     {step.number}
                   </div>
                   <span
-                    className={`text-sm hidden sm:inline ${
+                    className={`text-sm whitespace-nowrap ${
                       index <= currentStepIndex
                         ? 'text-foreground font-medium'
                         : 'text-muted-foreground'
@@ -154,7 +154,7 @@ const Index = () => {
                 </div>
                 {index < steps.length - 1 && (
                   <div
-                    className={`h-0.5 mx-3 w-24 sm:w-32 md:w-40 ${
+                    className={`h-0.5 mx-2 flex-1 min-w-[16px] max-w-[64px] sm:max-w-[96px] md:max-w-[128px] ${
                       index < currentStepIndex ? 'bg-primary' : 'bg-muted'
                     }`}
                   />
