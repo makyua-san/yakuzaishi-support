@@ -84,7 +84,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       {/* ヘッダー */}
       <header className="bg-card border-b border-border sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4">
+        <div className="container mx-auto px-4 py-4 max-w-2xl">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-primary rounded-lg">
               <Pill className="h-6 w-6 text-primary-foreground" />
@@ -101,10 +101,10 @@ const Index = () => {
 
       {/* プログレスバー */}
       <div className="bg-card border-b border-border">
-        <div className="container mx-auto px-4 py-3">
+        <div className="container mx-auto px-4 py-3 max-w-2xl">
           <div className="flex items-center justify-between">
             {steps.map((step, index) => (
-              <div key={step.key} className="flex items-center flex-1">
+              <div key={step.key} className="flex items-center">
                 <div className="flex items-center gap-2">
                   <div
                     className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
@@ -127,7 +127,7 @@ const Index = () => {
                 </div>
                 {index < steps.length - 1 && (
                   <div
-                    className={`flex-1 h-0.5 mx-2 ${
+                    className={`h-0.5 mx-3 w-24 sm:w-32 md:w-40 ${
                       index < currentStepIndex ? 'bg-primary' : 'bg-muted'
                     }`}
                   />
@@ -232,7 +232,7 @@ const Index = () => {
 
       {/* フッター */}
       <footer className="border-t border-border mt-auto">
-        <div className="container mx-auto px-4 py-4 text-center text-sm text-muted-foreground">
+        <div className="container mx-auto px-4 py-4 text-center text-sm text-muted-foreground max-w-2xl">
           <p>© 2026 小児用量チェッカー - 薬剤師向け支援ツール</p>
         </div>
       </footer>

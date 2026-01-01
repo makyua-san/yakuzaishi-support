@@ -91,29 +91,40 @@ export const calculateDosage = (
     value: rule.note,
   });
 
-  // 処方量をmgに正規化
-  let prescribedSingleDoseMg = prescription.singleDose;
-  if (prescription.unit === 'mL' && prescription.concentration) {
-    prescribedSingleDoseMg = prescription.singleDose * prescription.concentration;
+  // 処方入力の有無を判定（mL入力時は濃度必須）
+  const hasPrescriptionInput =
+    prescription.unit === 'mL'
+      ? prescription.singleDose > 0 && !!prescription.concentration && prescription.concentration > 0
+      : prescription.singleDose > 0;
+
+  // 処方量をmgに正規化（入力がある場合のみ）
+  let prescribedSingleDoseMg = 0;
+  let prescribedDailyDoseMg = 0;
+
+  if (hasPrescriptionInput) {
+    prescribedSingleDoseMg = prescription.singleDose;
+    if (prescription.unit === 'mL' && prescription.concentration) {
+      prescribedSingleDoseMg = prescription.singleDose * prescription.concentration;
+      steps.push({
+        label: '処方量(mg換算)',
+        expr: `${prescription.singleDose} mL × ${prescription.concentration} mg/mL`,
+        value: `${roundValue(prescribedSingleDoseMg)} mg/回`,
+      });
+    } else {
+      steps.push({
+        label: '処方量',
+        expr: '',
+        value: `${prescribedSingleDoseMg} mg/回`,
+      });
+    }
+
+    prescribedDailyDoseMg = prescribedSingleDoseMg * prescription.dailyFrequency;
     steps.push({
-      label: '処方量(mg換算)',
-      expr: `${prescription.singleDose} mL × ${prescription.concentration} mg/mL`,
-      value: `${roundValue(prescribedSingleDoseMg)} mg/回`,
-    });
-  } else {
-    steps.push({
-      label: '処方量',
-      expr: '',
-      value: `${prescribedSingleDoseMg} mg/回`,
+      label: '処方1日量',
+      expr: `${roundValue(prescribedSingleDoseMg)} × ${prescription.dailyFrequency}回`,
+      value: `${roundValue(prescribedDailyDoseMg)} mg/day`,
     });
   }
-
-  const prescribedDailyDoseMg = prescribedSingleDoseMg * prescription.dailyFrequency;
-  steps.push({
-    label: '処方1日量',
-    expr: `${roundValue(prescribedSingleDoseMg)} × ${prescription.dailyFrequency}回`,
-    value: `${roundValue(prescribedDailyDoseMg)} mg/day`,
-  });
 
   // 基準値計算
   let baseDailyDose: number;
@@ -241,6 +252,25 @@ export const calculateDosage = (
       expr: `${roundValue(baseSingleDose)} × (1 + ${factor})`,
       value: `${roundValue(recommendedMax)} mg/回`,
     });
+  }
+
+  // 処方未入力の場合はここで返す（推奨レンジのみ表示用）
+  if (!hasPrescriptionInput) {
+    return {
+      status: 'warning',
+      statusLabel: '処方未入力',
+      appliedRule: rule,
+      rangePolicy,
+      rangePercent,
+      baseDailyDose: roundValue(baseDailyDose),
+      baseSingleDose: roundValue(baseSingleDose),
+      recommendedMin: roundValue(recommendedMin),
+      recommendedMax: roundValue(recommendedMax),
+      prescribedSingleDose: 0,
+      prescribedDailyDose: 0,
+      steps,
+      warnings,
+    };
   }
 
   // 最大量チェック

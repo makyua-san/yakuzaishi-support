@@ -74,8 +74,13 @@ export const ResultDisplay = ({
   const config = statusConfig[result.status];
   const StatusIcon = config.icon;
 
-  // 処方が入力されているかチェック
-  const hasPrescription = prescription.singleDose > 0;
+  // 処方が入力されているかチェック（mL入力時は濃度必須）
+  const hasPrescription =
+    prescription.unit === 'mL'
+      ? prescription.singleDose > 0 &&
+        prescription.concentration !== undefined &&
+        prescription.concentration > 0
+      : prescription.singleDose > 0;
 
   return (
     <div className="space-y-4">
@@ -160,33 +165,6 @@ export const ResultDisplay = ({
           </CollapsibleTrigger>
           <CollapsibleContent>
             <CardContent className="pt-0 space-y-4">
-              {/* エビデンス情報 */}
-              {result.appliedRule && (
-                <div className="p-4 bg-accent/30 rounded-lg border border-accent">
-                  <p className="text-sm font-medium text-accent-foreground mb-2">
-                    📚 根拠となる情報
-                  </p>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">参照元:</span>
-                      <span className="font-medium">{result.appliedRule.source_title}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">版:</span>
-                      <span>{result.appliedRule.source_version}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">用法:</span>
-                      <span className="font-medium">{result.appliedRule.base_unit}</span>
-                    </div>
-                    <div className="mt-2 pt-2 border-t border-border">
-                      <span className="text-muted-foreground">注記: </span>
-                      <span>{result.appliedRule.note}</span>
-                    </div>
-                  </div>
-                </div>
-              )}
-
               {/* 計算フロー */}
               <div className="space-y-3">
                 <p className="text-sm font-medium text-muted-foreground">📐 計算過程</p>
@@ -215,6 +193,33 @@ export const ResultDisplay = ({
                   ))}
                 </div>
               </div>
+
+              {/* エビデンス情報（計算過程の下に配置） */}
+              {result.appliedRule && (
+                <div className="p-4 bg-accent/30 rounded-lg border border-accent">
+                  <p className="text-sm font-medium text-accent-foreground mb-2">
+                    📚 根拠となる情報
+                  </p>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">参照元:</span>
+                      <span className="font-medium">{result.appliedRule.source_title}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">版:</span>
+                      <span>{result.appliedRule.source_version}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">用法:</span>
+                      <span className="font-medium">{result.appliedRule.base_unit}</span>
+                    </div>
+                    <div className="mt-2 pt-2 border-t border-border">
+                      <span className="text-muted-foreground">注記: </span>
+                      <span>{result.appliedRule.note}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
             </CardContent>
           </CollapsibleContent>
         </Card>
