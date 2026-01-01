@@ -52,6 +52,11 @@ const Index = () => {
     return calculateDosage(selectedDrug, patient, prescription, rangePercent, selectedRuleIndex);
   }, [selectedDrug, patient, prescription, rangePercent, selectedRuleIndex]);
 
+  const handleSelectDrug = (drug: DrugInfo) => {
+    setSelectedDrug(drug);
+    setCurrentStep('patient');
+  };
+
   const goToNext = () => {
     const nextIndex = currentStepIndex + 1;
     if (nextIndex < steps.length) {
@@ -153,7 +158,7 @@ const Index = () => {
           <CardContent>
             {currentStep === 'drug' && (
               <DrugSelector
-                onSelect={setSelectedDrug}
+                onSelect={handleSelectDrug}
                 selectedDrug={selectedDrug}
               />
             )}
@@ -210,6 +215,8 @@ const Index = () => {
             <Button onClick={reset} variant="secondary" className="flex-1">
               新規チェック
             </Button>
+          ) : currentStep === 'drug' ? (
+            <div className="flex-1" />
           ) : (
             <Button
               onClick={goToNext}
