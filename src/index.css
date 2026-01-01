@@ -1,0 +1,146 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 200 20% 98%;
+    --foreground: 210 40% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 210 40% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 40% 15%;
+
+    --primary: 210 80% 45%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 200 15% 94%;
+    --secondary-foreground: 210 40% 20%;
+
+    --muted: 200 15% 94%;
+    --muted-foreground: 210 15% 45%;
+
+    --accent: 160 60% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 0%;
+
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+
+    --border: 210 25% 85%;
+    --input: 210 25% 85%;
+    --ring: 210 80% 45%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 200 20% 97%;
+    --sidebar-foreground: 210 40% 15%;
+    --sidebar-primary: 210 80% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 200 15% 94%;
+    --sidebar-accent-foreground: 210 40% 20%;
+    --sidebar-border: 210 25% 85%;
+    --sidebar-ring: 210 80% 45%;
+
+    --chart-1: 210 80% 45%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 38 92% 50%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 0 72% 51%;
+
+    --sidebar: 200 20% 97%;
+
+    --font-sans: 'Space Grotesk', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+    --font-serif: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+    --font-mono: 'Space Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+
+    --shadow-2xs: 0 1px 2px 0 hsl(210 40% 15% / 0.05);
+    --shadow-xs: 0 1px 3px 0 hsl(210 40% 15% / 0.1);
+    --shadow-sm: 0 2px 4px 0 hsl(210 40% 15% / 0.1);
+    --shadow: 0 4px 6px -1px hsl(210 40% 15% / 0.1);
+    --shadow-md: 0 6px 10px -2px hsl(210 40% 15% / 0.1);
+    --shadow-lg: 0 10px 20px -3px hsl(210 40% 15% / 0.1);
+    --shadow-xl: 0 20px 25px -5px hsl(210 40% 15% / 0.1);
+    --shadow-2xl: 0 25px 50px -12px hsl(210 40% 15% / 0.25);
+
+    --tracking-normal: 0em;
+    --spacing: 0.25rem;
+  }
+
+  .dark {
+    --background: 210 40% 10%;
+    --foreground: 200 20% 98%;
+
+    --card: 210 40% 12%;
+    --card-foreground: 200 20% 98%;
+
+    --popover: 210 40% 12%;
+    --popover-foreground: 200 20% 98%;
+
+    --primary: 210 80% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 30% 18%;
+    --secondary-foreground: 200 20% 98%;
+
+    --muted: 210 30% 18%;
+    --muted-foreground: 210 15% 60%;
+
+    --accent: 160 60% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 0%;
+
+    --success: 142 71% 50%;
+    --success-foreground: 0 0% 100%;
+
+    --border: 210 30% 25%;
+    --input: 210 30% 25%;
+    --ring: 210 80% 55%;
+
+    --sidebar-background: 210 40% 8%;
+    --sidebar-foreground: 200 20% 98%;
+    --sidebar-primary: 210 80% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 30% 18%;
+    --sidebar-accent-foreground: 200 20% 98%;
+    --sidebar-border: 210 30% 25%;
+    --sidebar-ring: 210 80% 55%;
+
+    --chart-1: 210 80% 55%;
+    --chart-2: 160 60% 50%;
+    --chart-3: 38 92% 50%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 0 62% 45%;
+
+    --sidebar: 210 40% 8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
