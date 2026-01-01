@@ -49,6 +49,10 @@ const Index = () => {
     }
   }, []);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [currentStep]);
+
   const currentStepIndex = steps.findIndex((s) => s.key === currentStep);
 
   const canProceed = useMemo(() => {
